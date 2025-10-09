@@ -1,26 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-
-// Shell Components (temporary placeholders)
-function TaskListView() {
-  return (
-    <div className="container mt-4">
-      <h2>Task List View</h2>
-      <p>This is where all tasks will be displayed.</p>
-    </div>
-  );
-}
-
-function AddTaskView() {
-  return (
-    <div className="container mt-4">
-      <h2>Add Task View</h2>
-      <p>This is where the add task form will appear.</p>
-    </div>
-  );
-}
+import TaskListView from "./TaskListView";
+import AddTaskView from "./AddTaskView";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Main() {
+  const [tasks, setTasks] = useState([]);
+
+  const addTask = (taskDetails) => {
+    setTasks([...tasks, { ...taskDetails, id: Date.now() }]);
+  };
+
+  const deleteTask = (taskId) => {
+    setTasks(tasks.filter((task) => task.id !== taskId));
+  };
+
   return (
     <Router>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -44,17 +38,16 @@ function Main() {
                 <Link className="nav-link" to="/">Home</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/add-task">Add Task</Link>
+                <Link className="nav-link" to="/add">Add Task</Link>
               </li>
             </ul>
           </div>
         </div>
       </nav>
 
-      {/* Routing Section */}
       <Routes>
-        <Route path="/" element={<TaskListView />} />
-        <Route path="/add-task" element={<AddTaskView />} />
+        <Route path="/" element={<TaskListView tasks={tasks} deleteTask={deleteTask} />} />
+        <Route path="/add" element={<AddTaskView addTask={addTask} />} />
       </Routes>
     </Router>
   );
