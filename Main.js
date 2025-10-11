@@ -1,43 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import TaskListView from "./Components/TaskListView";
-import AddTaskView from "./Components/AddTaskView";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import TaskListView from "./Task-Management-Application/TaskListView";
+import AddTaskView from "./Task-Management-Application/AddTaskView";
+import "./Task-Management-Application/style.css";
 
 function Main() {
+  const [tasks, setTasks] = useState([]);
+
+  const addTask = (taskDetails) => {
+    setTasks([...tasks, { ...taskDetails, id: Date.now() }]);
+  };
+
+  const deleteTask = (taskId) => {
+    setTasks(tasks.filter((task) => task.id !== taskId));
+  };
+
   return (
     <Router>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div className="container-fluid">
-          <Link className="navbar-brand" to="/">Task Manager</Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ms-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="/">Home</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/add">Add Task</Link>
-              </li>
-            </ul>
-          </div>
+      {/* ===== Navbar ===== */}
+      <nav className="navbar">
+        <div className="navbar-left">
+          <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="Logo" />
+          <span className="navbar-title">iGit Task Manager</span>
+        </div>
+        <div className="navbar-right">
+          <Link className="btn-home" to="/">
+            Home
+          </Link>
+          <Link className="btn-add" to="/add">
+            + Add Task
+          </Link>
         </div>
       </nav>
 
+      {/* ===== Routes ===== */}
       <Routes>
-        <Route path="/" element={<TaskListView />} />
-        <Route path="/add" element={<AddTaskView />} />
+        <Route
+          path="/"
+          element={<TaskListView tasks={tasks} deleteTask={deleteTask} />}
+        />
+        <Route path="/add" element={<AddTaskView addTask={addTask} />} />
       </Routes>
     </Router>
   );
