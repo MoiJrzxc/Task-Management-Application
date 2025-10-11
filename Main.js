@@ -24,18 +24,23 @@ function Main() {
           <span className="navbar-title">iGit Task Manager</span>
         </div>
         <div className="navbar-right">
-          <Link className="btn-home" to="/">Home</Link>
+          <Link className="btn-home" to="/">
+            Home
+          </Link>
+          <Link className="btn-add" to="/add">
+            + Add Task
+          </Link>
         </div>
       </nav>
 
       {/* ===== Routes ===== */}
       <Routes>
-        <Route path="/" element={<TaskListView tasks={tasks} deleteTask={deleteTask} />} />
+        <Route
+          path="/"
+          element={<TaskListView tasks={tasks} deleteTask={deleteTask} />}
+        />
         <Route path="/add" element={<AddTaskView addTask={addTask} />} />
       </Routes>
-
-      {/* ===== Floating Add Button ===== */}
-      <Link to="/add" className="floating-btn">+</Link>
     </Router>
   );
 }
